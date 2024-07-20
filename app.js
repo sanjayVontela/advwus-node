@@ -38,8 +38,12 @@ const __dirname = path.dirname(__filename);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 mongoose.connect("mongodb+srv://sanjaykumar9949088606:oHazfu5DcCRcVh5b@cluster0.te7hirj.mongodb.net/advwus", { useNewUrlParser: true });
 
+
 app.use('/auth', authRoutes);
 app.use('/image', imageRoute);
 app.use("/user",userRoute)
+
+
+
 
 export default app;

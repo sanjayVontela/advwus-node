@@ -7,10 +7,6 @@ const userSchema = {
     role:String,
     organizatonName:String,
     organizationBio:String,
-    productName:String,
-    productType:String,
-    productDesc:String,
-    range:Array,
     channelName:String,
     channelDesc:String,
     where:Array,
@@ -21,6 +17,6 @@ const userSchema = {
     profilePic:String,
 };
 
-const User = mongoose.model("User",userSchema);
+const User = mongoose.model("User",userSchema,"user");
 
 export default User;

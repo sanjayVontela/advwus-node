@@ -135,5 +135,4 @@ export const profile = async (req,res) =>{
     } catch (error) {
         res.status(500).send({error:"internal server error"})
     }
-    return res.json(req.user);
 }

@@ -1,5 +1,7 @@
 import User from "../models/user.js";
 import Product from "../models/product.js";
+import Wishlist from "../models/Wishlist.js";
+import { getWishlistData, getOwnProducts } from "../service/UserService.js";
 
 export const allCustomers = async (req, res) =>{
 
@@ -28,21 +30,22 @@ catch (error){
 
 export const ownProducts = async (req,res) => {
     
-    try {
-        // console.log(req.user);
-        const data = await Product.find({username:req.user.username})
-        return res.json({data:data})
-    } catch (error) {
-        return res.status(500).json({error:"Internal Server error"});
-        
-    }
+   const data = await getOwnProducts(req.user.username);
+   if(data.data){
+    // console.log(data);
+    return res.json(data)
+   }
+   else{ownProducts
+    return res.status(500).json(data)
+   }
 }
 
 export const deleteProduct = async (req,res) => {
 
     try {
-        const data = await Product.findByIdAndDelete(req.params.id);
-        return res.json({message:"success"});
+        await Product.findByIdAndDelete(req.params.id);
+        const data = await getOwnProducts(req.user.username);
+        return res.json({message:"success",data});
 
     } catch (error) {
         return res.status(500).json({error:"Internal server error"});
@@ -87,3 +90,76 @@ export const editProduct = async (req,res) => {
     }
         
     }
+
+
+export const addToWishlist = async (req,res) => {
+    // console.log("sanjay");
+    
+    const id = req.params.id;
+
+    try {
+        
+        const user = await Wishlist.find({consumer:id,producer:req.user.username});
+        // console.log(user);
+        if(user.length === 0){
+
+            const wish = new Wishlist({
+                producer:req.user.username,
+                consumer:id
+            })
+            wish.save()
+            // console.log(wish);
+            return res.json({message:"Success"});
+
+        }
+        else{
+            return res.json({already:"Already in Wishlist"});
+            
+        }
+
+    } catch (error) {
+        
+        return res.status(500).json({error:"Internal Server Error"});
+    }
+
+
+}
+
+
+
+export const allWishlist = async (req,res) => {
+
+    const userDetails = await getWishlistData(req.user.username);
+    // console.log(userDetails);
+
+    if (userDetails.data){
+        return res.json({data:userDetails.data})
+    }
+    else{
+        return res.status(500).json(userDetails)
+    }
+}
+
+export const deleteWishlist = async (req,res) =>{
+
+    try {
+        const id = req.params.id;
+        // console.log(id);
+        const data = await Wishlist.deleteOne({producer:req.user.username,consumer:id})
+        
+        const remainingData = await getWishlistData(req.user.username)
+
+        if(remainingData.data){
+
+            return res.json({message:"Success",data:remainingData.data})
+        }
+        else{
+            return res.status(500).json(remainingData);
+        }
+        
+    } catch (error) {
+        return res.status(500).json({error:"Internal Server Error"});
+    }
+   
+
+}

@@ -136,3 +136,14 @@ export const profile = async (req,res) =>{
         res.status(500).send({error:"internal server error"})
     }
 }
+
+
+export const logout = async (req,res,next) =>{
+
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        return res.json({message:"success"})
+      });
+
+}
+

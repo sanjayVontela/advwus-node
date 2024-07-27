@@ -4,14 +4,18 @@ import Wishlist from "../models/Wishlist.js";
 import { getWishlistData, getOwnProducts } from "../service/UserService.js";
 
 export const allCustomers = async (req, res) =>{
-
-    await User.find({role:"consumer"})
+    try {
+        await User.find({role:"consumer"})
     .then(data=>{
         return res.json({data:data})
     })
     .catch(err=>{
         return res.send({error:err})
     })
+    } catch (error) {
+        return res.status(500).json({error:"Internal Server Error"});
+    }
+    
 }
 
 export const addProduct = async (req,res) => {
@@ -30,14 +34,22 @@ catch (error){
 
 export const ownProducts = async (req,res) => {
     
-   const data = await getOwnProducts(req.user.username);
-   if(data.data){
-    // console.log(data);
-    return res.json(data)
+   try{
+    const data = await getOwnProducts(req.user.username);
+    if(data.data){
+     // console.log(data);
+     return res.json(data)
+    }
+    else{
+     return res.status(500).json(data)
+    }
    }
-   else{ownProducts
-    return res.status(500).json(data)
+
+   catch(error){
+
+    res.status(500).json({error:"Internal Server Error"});
    }
+    
 }
 
 export const deleteProduct = async (req,res) => {
@@ -129,15 +141,24 @@ export const addToWishlist = async (req,res) => {
 
 export const allWishlist = async (req,res) => {
 
-    const userDetails = await getWishlistData(req.user.username);
-    // console.log(userDetails);
+    try {
+        
+        const userDetails = await getWishlistData(req.user.username);
+        if (userDetails.data){
+            return res.json({data:userDetails.data})
+        }
+        else{
+            return res.status(500).json(userDetails)
+        }
 
-    if (userDetails.data){
-        return res.json({data:userDetails.data})
+    } catch (error) {
+        
+        return res.status(500).json({error:"Internal Server Error"})
+
+
     }
-    else{
-        return res.status(500).json(userDetails)
-    }
+
+   
 }
 
 export const deleteWishlist = async (req,res) =>{
@@ -161,5 +182,27 @@ export const deleteWishlist = async (req,res) =>{
         return res.status(500).json({error:"Internal Server Error"});
     }
    
+
+}
+
+
+
+export const allProducts = async (req,res) =>{
+
+    try{ 
+
+        if(req.user.role !== "producer"){
+            const data = await Product.find({});
+            return res.json({data:data})
+        }else{
+            return res.status(201).json({error:"unauthorized"});
+        }
+
+       
+
+    }
+    catch{
+        return res.status(501).json({error:"Internal Server Error"});
+    }
 
 }

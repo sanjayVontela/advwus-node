@@ -22,7 +22,7 @@ export const addProduct = async (req,res) => {
 try{
     const jsonData = req.body;
     // console.log(req.user);
-    const product = new Product({...jsonData,username:req.user.username});
+    const product = new Product({...jsonData,userId:req.user._id});
     product.save();
     return res.send({message:"Success"})
 }

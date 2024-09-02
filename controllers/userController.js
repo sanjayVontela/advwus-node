@@ -35,7 +35,9 @@ catch (error){
 export const ownProducts = async (req,res) => {
     
    try{
-    const data = await getOwnProducts(req.user.username);
+    // console.log(req.user);
+    
+    const data = await getOwnProducts(req.user._id);
     if(data.data){
      // console.log(data);
      return res.json(data)
@@ -46,7 +48,8 @@ export const ownProducts = async (req,res) => {
    }
 
    catch(error){
-
+    // console.log(error);
+    
     res.status(500).json({error:"Internal Server Error"});
    }
     

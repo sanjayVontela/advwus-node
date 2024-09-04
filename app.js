@@ -11,8 +11,7 @@ import imageRoute from './middleware/imageRouter.js';
 import userRoute from './routes/userRoutes.js';
 import chatSocketHandler from './controllers/socketHandler.js'; // Import your chatSocketHandler
 import chatRoutes from './routes/chatRoutes.js'
-import cRoutes from "./routes/cRoutes.js";
-import messageRoutes from './routes/messageRoutes.js'
+
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
@@ -49,18 +48,14 @@ app.use(passport.session());
 app.use('/images', express.static('images'));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI || "mongodb+srv://sanjaykumar9949088606:oHazfu5DcCRcVh5b@cluster0.te7hirj.mongodb.net/advwus", { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true 
-})
+mongoose.connect(process.env.MONGO_URI || "mongodb+srv://sanjaykumar9949088606:oHazfu5DcCRcVh5b@cluster0.te7hirj.mongodb.net/advwus")
 
 // Define routes
 app.use('/auth', authRoutes);
 app.use('/image', imageRoute);
 app.use('/user', userRoute);
 app.use('/chat', chatRoutes);
-app.use('/c', cRoutes);
-app.use('/message', messageRoutes);
+
 
 // Socket.io setup
 // io.use((socket, next) => {
@@ -74,7 +69,4 @@ io.use((socket, next) => {
 io.on('connection', chatSocketHandler);
     
 
-
-server.listen(4444, () => {
-    console.log('Server is running on port 4444');
-});
+export default server;

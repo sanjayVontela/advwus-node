@@ -19,9 +19,9 @@ export const getWishlistData = async (username) => {
 
 export const getOwnProducts = async (username)=>{
     try {
-        // console.log(username);
+
         const data = await Product.find({userId:username})
-        // console.log(data);
+
         return {data:data}
     } catch (error) {
         return ({error:"Internal Server error"});

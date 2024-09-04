@@ -5,7 +5,7 @@ export const initializeSocket = (server) => {
     const io = new SocketIoServer(server);
 
     io.on('connection', (socket) => {
-        console.log('New client connected');
+        
 
         // Handle incoming messages
         socket.on('sendMessage', async (message) => {
@@ -24,7 +24,7 @@ export const initializeSocket = (server) => {
 
         // Handle user disconnect
         socket.on('disconnect', () => {
-            console.log('Client disconnected');
+            
         });
     });
 

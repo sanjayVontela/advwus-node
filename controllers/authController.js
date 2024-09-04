@@ -18,16 +18,13 @@ export const register = async (req, res)=>{
                 }
                 else{
                       const new_user = new User({
-                        fname:jsonData.fname,
-                        lname:jsonData.lname,
-                        username:jsonData.username,
+                        fname:jsonData.fname.toLowerCase(),
+                        lname:jsonData.lname.toLowerCase(),
+                        username:jsonData.username.toLowerCase(),
                         password:hash,
                         role:jsonData.role,
-                        organizatonName:jsonData.organizatonName,
-                        organizationBio:jsonData.organizationBio,
-                        productName:jsonData.productName,
-                        productType:jsonData.productType,
-                        productDesc:jsonData.productDesc,
+                        organizatonName:jsonData.organizatonName.toLowerCase(),
+                        organizationBio:jsonData.organizationBio.toLowerCase(),
                         range:jsonData.range,
                         channelName:jsonData.channelName,
                         channelDesc:jsonData.channelDesc,

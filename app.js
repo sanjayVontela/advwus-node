@@ -11,9 +11,12 @@ import imageRoute from './middleware/imageRouter.js';
 import userRoute from './routes/userRoutes.js';
 import chatSocketHandler from './controllers/socketHandler.js'; // Import your chatSocketHandler
 import chatRoutes from './routes/chatRoutes.js'
+import cRoutes from "./routes/cRoutes.js";
+import messageRoutes from './routes/messageRoutes.js'
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
+    pingTimeout:60000,
     cors: {
         origin: 'http://localhost:3000',
         credentials: true
@@ -56,13 +59,21 @@ app.use('/auth', authRoutes);
 app.use('/image', imageRoute);
 app.use('/user', userRoute);
 app.use('/chat', chatRoutes);
+app.use('/c', cRoutes);
+app.use('/message', messageRoutes);
 
 // Socket.io setup
+// io.use((socket, next) => {
+//     sessionMiddleware(socket.request, {}, next); // Apply session middleware
+// });
+
 io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next); // Apply session middleware
 });
 
-io.on('connection', chatSocketHandler); // Handle chat socket connections
+io.on('connection', chatSocketHandler);
+    
+
 
 server.listen(4444, () => {
     console.log('Server is running on port 4444');

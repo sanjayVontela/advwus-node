@@ -21,7 +21,7 @@ export const allCustomers = async (req, res) =>{
 export const addProduct = async (req,res) => {
 try{
     const jsonData = req.body;
-    // console.log(req.user);
+    
     const product = new Product({...jsonData,userId:req.user._id});
     product.save();
     return res.send({message:"Success"})
@@ -35,11 +35,11 @@ catch (error){
 export const ownProducts = async (req,res) => {
     
    try{
-    // console.log(req.user);
+    
     
     const data = await getOwnProducts(req.user._id);
     if(data.data){
-     // console.log(data);
+     
      return res.json(data)
     }
     else{
@@ -48,7 +48,7 @@ export const ownProducts = async (req,res) => {
    }
 
    catch(error){
-    // console.log(error);
+    
     
     res.status(500).json({error:"Internal Server Error"});
    }
@@ -84,8 +84,7 @@ export const getProduct = async(req,res)=>{
 export const editProduct = async (req,res) => {
     try{
         const jsonData = req.body;
-        // console.log(jsonData);
-        // console.log(req.user);
+
         await Product.findByIdAndUpdate(jsonData._id,{
             productName:jsonData.productName,
             productType:jsonData.productType,
@@ -108,14 +107,14 @@ export const editProduct = async (req,res) => {
 
 
 export const addToWishlist = async (req,res) => {
-    // console.log("sanjay");
+
     
     const id = req.params.id;
 
     try {
         
         const user = await Wishlist.find({consumer:id,producer:req.user.username});
-        // console.log(user);
+    
         if(user.length === 0){
 
             const wish = new Wishlist({
@@ -123,7 +122,7 @@ export const addToWishlist = async (req,res) => {
                 consumer:id
             })
             wish.save()
-            // console.log(wish);
+        
             return res.json({message:"Success"});
 
         }
@@ -168,7 +167,7 @@ export const deleteWishlist = async (req,res) =>{
 
     try {
         const id = req.params.id;
-        // console.log(id);
+
         const data = await Wishlist.deleteOne({producer:req.user.username,consumer:id})
         
         const remainingData = await getWishlistData(req.user.username)

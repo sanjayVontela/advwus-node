@@ -99,17 +99,16 @@ app.post("/register",async (req,res)=>{
     }
     
     
-    // console.log(jsonData.fname);
 
 });
 
 passport.use(new LocalStrategy(async (username, password, cb) => {
-    // console.log(username,password);
+    
     try {
 
         await User.findOne({username:username})
         .then(user=>{
-            // console.log(user);
+            
             if(!user){
                 return cb(null, false, { message: 'Incorrect email.' });
             }
@@ -135,7 +134,7 @@ passport.deserializeUser(async (user, cb) => {
 
 
 app.post('/login', (req, res, next) => {
-    // console.log(req.body.username);
+    
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             return next(err);
@@ -181,7 +180,7 @@ app.post("/changepassword",async (req,res,next)=>{
             })
         }
     } catch (error) {
-        console.log(error);
+        
         return res.status(500).json({ error: "Error inserting user into database" });
                     
     }
